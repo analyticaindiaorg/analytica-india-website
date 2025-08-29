@@ -164,32 +164,32 @@ body {
         }
 
         .progress-container {
-            width: 100%;
-            max-width: 600px;
-            margin: 30px 0;
-        }
+  width: 100%;
+  max-width: 400px;
+  margin: 20px auto;
+  font-family: Arial, sans-serif;
+}
 
-        .progress-info {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            color: #e0e0e0;
-        }
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
 
-        .progress-bar {
-            height: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            overflow: hidden;
-        }
+.progress-bar {
+  width: 100%;
+  height: 15px;
+  background: #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+}
 
-        .progress-fill {
-            height: 100%;
-            width: 75%;
-            background: linear-gradient(to right, #ffde59, #ff8a00);
-            border-radius: 10px;
-            animation: progressAnimation 3s ease-in-out;
-        }
+.progress-fill {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, #4caf50, #81c784);
+  transition: width 0.5s ease;
+}
 
         footer {
             padding: 20px 0;
@@ -498,14 +498,14 @@ body {
             <h2>The future of smarter business begins soon—get ready for next-level Should Cost Analysis, Power BI insights, Excel Automation magic, and powerful Negotiation support!</h2>
             
             <div class="progress-container">
-                <div class="progress-info">
-                    <span>Progress</span>
-                    <span>75%</span>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill"></div>
-                </div>
-            </div>
+  <div class="progress-info">
+    <span>Progress</span>
+    <span id="progressPercent">0%</span>
+  </div>
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+</div>
             
             <!-- Notify Me button -->
             <button id="notifyBtn" class="notify-btn">Notify Me</button>
@@ -582,28 +582,40 @@ body {
         });
 
         // Countdown Timer
-        function updateCountdown() {
-            const launchDate = new Date('2025-10-01T23:59:59');
-            const now = new Date();
-            const diff = launchDate - now;
-            
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-            
-            document.getElementById('days').textContent = days.toString().padStart(2, '0');
-            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
-            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
-            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
-        }
-        
-        setInterval(updateCountdown, 1000);
-        updateCountdown();
+// Set your countdown dates
+const startDate = new Date('2025-08-29T00:00:00'); // starting point
+const launchDate = new Date('2025-10-01T23:59:59'); // target date
 
-        window.addEventListener("load", function() {
-            window.scrollTo(0, 0);   // ensures top-left position on load
-        });
+function updateCountdown() {
+    const now = new Date();
+    const total = launchDate - startDate;
+    const elapsed = now - startDate;
+    let progress = (elapsed / total) * 100;
+
+    // Clamp between 0–100
+    if (progress < 0) progress = 0;
+    if (progress > 100) progress = 100;
+
+    // Update bar
+    document.getElementById("progressFill").style.width = progress + "%";
+    document.getElementById("progressPercent").textContent = Math.floor(progress) + "%";
+
+    // --- countdown (your existing logic) ---
+    const diff = launchDate - now;
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+    document.getElementById('days').textContent = days.toString().padStart(2, '0');
+    document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+    document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+    document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+}
+
+// Update every second
+setInterval(updateCountdown, 1000);
+updateCountdown();
 
         // Modal functionality
   const modal = document.getElementById("notifyModal");
